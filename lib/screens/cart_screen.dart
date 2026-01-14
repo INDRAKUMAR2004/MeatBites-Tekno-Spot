@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import '../constants/colors.dart';
 import '../providers/cart_provider.dart';
+import '../providers/order_provider.dart';
 
 class CartScreen extends ConsumerWidget {
   const CartScreen({super.key});
@@ -248,8 +249,25 @@ class CartScreen extends ConsumerWidget {
                      ),
 
                   ElevatedButton(
-                    onPressed: () {
-                      // Checkout
+                    onPressed: () async {
+                      if (cartItems.isEmpty) return;
+                      
+                      try {
+                        await ref.read(ordersServiceProvider).placeOrder(cartItems, grandTotal);
+                        cartNotifier.clear();
+                        if (context.mounted) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(content: Text('Order placed successfully!')),
+                          );
+                          context.go('/orders');
+                        }
+                      } catch (e) {
+                         if (context.mounted) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(content: Text('Failed to place order: $e')),
+                          );
+                        }
+                      }
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: AppColors.primary,
@@ -264,7 +282,7 @@ class CartScreen extends ConsumerWidget {
                         Text("₹${grandTotal.toStringAsFixed(0)}", style: const TextStyle(fontWeight: FontWeight.w900, fontSize: 18)),
                         const Row(
                           children: [
-                            Text("Proceed to Pay", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+                            Text("Place Order", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
                             SizedBox(width: 8),
                             Icon(Icons.arrow_forward_rounded, size: 20)
                           ],

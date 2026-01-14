@@ -1,0 +1,96 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:meatbites_flutter/screens/login_screen.dart';
+import '../models/user_model.dart';
+
+class AuthService {
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+
+  Stream<User?> get authStateChanges => _auth.authStateChanges();
+  User? get currentUser => _auth.currentUser;
+
+  Future<void> signIn(String email, String password) async {
+    await _auth.signInWithEmailAndPassword(email: email, password: password);
+  }
+
+  Future<void> signUp({
+    required String email,
+    required String password,
+    required String name,
+    required String phone,
+    required String address,
+  }) async {
+    final credential = await _auth.createUserWithEmailAndPassword(
+        email: email, password: password);
+    final user = credential.user;
+
+    if (user != null) {
+      await user.updateDisplayName(name); // Update Auth profile too
+
+      final userModel = UserModel(
+        uid: user.uid,
+        email: email,
+        displayName: name,
+        phoneNumber: phone,
+        address: address,
+      );
+
+      await _firestore.collection('users').doc(user.uid).set(userModel.toMap());
+    }
+  }
+
+  Future<void> updateProfile({
+    required String uid,
+    String? name,
+    String? phone,
+    String? address,
+  }) async {
+    final Map<String, dynamic> data = {};
+    if (name != null) data['displayName'] = name;
+    if (phone != null) data['phoneNumber'] = phone;
+    if (address != null) data['address'] = address;
+
+    if (data.isNotEmpty) {
+      await _firestore.collection('users').doc(uid).update(data);
+      if (name != null) {
+        await _auth.currentUser?.updateDisplayName(name);
+      }
+    }
+  }
+
+  Future<void> signOut(BuildContext context) async {
+    await _auth.signOut();
+    Navigator.push(
+        context, MaterialPageRoute(builder: (builder) => LoginScreen()));
+  }
+
+  Stream<UserModel?> getUserProfile(String uid) {
+    return _firestore.collection('users').doc(uid).snapshots().map((doc) {
+      if (doc.exists) {
+        return UserModel.fromMap(doc.data() as Map<String, dynamic>);
+      }
+      return null;
+    });
+  }
+}
+
+final authServiceProvider = Provider<AuthService>((ref) {
+  return AuthService();
+});
+
+final authStateProvider = StreamProvider<User?>((ref) {
+  return ref.watch(authServiceProvider).authStateChanges;
+});
+
+final userProfileProvider = StreamProvider<UserModel?>((ref) {
+  final authState = ref.watch(authStateProvider);
+  final user = authState.asData?.value;
+
+  if (user != null) {
+    return ref.watch(authServiceProvider).getUserProfile(user.uid);
+  }
+  return Stream.value(null);
+});

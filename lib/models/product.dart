@@ -11,6 +11,7 @@ class Product {
   final String grossWeight;
   final String deliveryTime;
   final int? discountPercentage;
+  final bool isBestseller;
 
   const Product({
     required this.id,
@@ -25,5 +26,6 @@ class Product {
     this.grossWeight = "550g",
     this.deliveryTime = "90 min",
     this.discountPercentage,
+    this.isBestseller = false,
   });
 }

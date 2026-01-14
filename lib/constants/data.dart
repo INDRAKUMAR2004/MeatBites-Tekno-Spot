@@ -1,3 +1,5 @@
+// ignore_for_file: constant_identifier_names
+
 import '../models/category.dart';
 import '../models/product.dart';
 
@@ -27,6 +29,7 @@ const List<Product> PRODUCTS = [
     grossWeight: "550g",
     deliveryTime: "45 min",
     discountPercentage: 12,
+    isBestseller: true,
   ),
   Product(
     id: "2",
@@ -52,6 +55,7 @@ const List<Product> PRODUCTS = [
     grossWeight: "180g",
     deliveryTime: "60 min",
     discountPercentage: 8,
+    isBestseller: true,
   ),
   Product(
     id: "4",
@@ -77,6 +81,7 @@ const List<Product> PRODUCTS = [
     grossWeight: "550g",
     deliveryTime: "45 min",
     discountPercentage: 15,
+    // isBestseller: true,
   ),
 ];
 

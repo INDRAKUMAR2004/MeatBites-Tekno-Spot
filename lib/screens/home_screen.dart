@@ -8,11 +8,20 @@ import '../widgets/explore_category_grid_widget.dart';
 import '../widgets/featured_collections_widget.dart';
 import '../widgets/flash_sale_widget.dart';
 
-class HomeScreen extends StatelessWidget {
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
+import '../providers/address_provider.dart';
+import '../providers/selected_address_provider.dart';
+import 'saved_address_screen.dart';
+
+class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    // Watch the COMPUTED selected address provider
+    final selectedAddressAsync = ref.watch(selectedAddressProvider);
+
     return Scaffold(
       backgroundColor: Colors.white,
       body: CustomScrollView(
@@ -26,28 +35,46 @@ class HomeScreen extends StatelessWidget {
             surfaceTintColor: Colors.white,
             titleSpacing: 0,
             toolbarHeight: 70,
-            title: const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 16),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                   Row(
-                     children: [
-                       Icon(LucideIcons.mapPin, color: AppColors.primary, size: 18),
-                       SizedBox(width: 6),
-                       Text('Home', style: TextStyle(
-                         color: Colors.black, fontSize: 16, fontWeight: FontWeight.w800
-                       )),
-                       Icon(Icons.keyboard_arrow_down, color: Colors.black)
-                     ],
-                   ),
-                   Padding(
-                     padding: EdgeInsets.only(left: 24),
-                     child: Text('A1, B Block Rd, Sector 63, Noida', 
-                       style: TextStyle(color: Colors.grey, fontSize: 12, overflow: TextOverflow.ellipsis),
+            title: InkWell(
+              onTap: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(builder: (_) => const SavedAddressScreen())
+                );
+              },
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                     const Row(
+                       children: [
+                         Icon(LucideIcons.mapPin, color: AppColors.primary, size: 18),
+                         SizedBox(width: 6),
+                         Text('Home', style: TextStyle(
+                           color: Colors.black, fontSize: 16, fontWeight: FontWeight.w800
+                         )),
+                         Icon(Icons.keyboard_arrow_down, color: Colors.black)
+                       ],
                      ),
-                   )
-                ],
+                     Padding(
+                       padding: const EdgeInsets.only(left: 24),
+                       child: selectedAddressAsync.when(
+                         data: (address) {
+                           if (address == null) {
+                             return const Text('Set your location', 
+                               style: TextStyle(color: Colors.grey, fontSize: 12, overflow: TextOverflow.ellipsis),
+                             );
+                           }
+                           return Text('${address.addressLine}, ${address.city}', 
+                             style: const TextStyle(color: Colors.grey, fontSize: 12, overflow: TextOverflow.ellipsis),
+                           );
+                         },
+                         loading: () => const Text('Locating...', style: TextStyle(color: Colors.grey, fontSize: 12)),
+                         error: (_,__) => const Text('Location unavailable', style: TextStyle(color: Colors.red, fontSize: 12)),
+                       ),
+                     )
+                  ],
+                ),
               ),
             ),
             actions: [
@@ -57,11 +84,14 @@ class HomeScreen extends StatelessWidget {
                  decoration: BoxDecoration(color: Colors.grey[100], shape: BoxShape.circle),
                  child: const Icon(LucideIcons.search, color: Colors.black, size: 22),
                ),
-               Container(
-                 margin: const EdgeInsets.only(right: 16),
-                 padding: const EdgeInsets.all(8),
-                 decoration: BoxDecoration(color: Colors.grey[100], shape: BoxShape.circle),
-                 child: const Icon(LucideIcons.user, color: Colors.black, size: 22),
+               InkWell(
+                 onTap: () => context.go('/profile'),
+                 child: Container(
+                   margin: const EdgeInsets.only(right: 16),
+                   padding: const EdgeInsets.all(8),
+                   decoration: BoxDecoration(color: Colors.grey[100], shape: BoxShape.circle),
+                   child: const Icon(LucideIcons.user, color: Colors.black, size: 22),
+                 ),
                ),
             ],
             bottom: PreferredSize(
@@ -83,9 +113,9 @@ class HomeScreen extends StatelessWidget {
               const BannerWidget(),
               const SizedBox(height: 32),
 
-              // 3. Flash Sale (Moved Below)
               
-              // 4. Section Title: Shop by Category
+              
+              // 3. Section Title: Shop by Category
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 child: Row(
@@ -100,7 +130,7 @@ class HomeScreen extends StatelessWidget {
               ),
               const SizedBox(height: 8),
               
-              // 5. Explore Grid
+              // 4. Explore Grid
               const SizedBox(height: 10), // grid has padding
             ]),
           ),
@@ -111,7 +141,7 @@ class HomeScreen extends StatelessWidget {
             delegate: SliverChildListDelegate([
               const SizedBox(height: 32),
               
-              // 3. Flash Sale (Moved Here)
+              // 5. Flash Sale
               const FlashSaleWidget(),
               const SizedBox(height: 32),
               

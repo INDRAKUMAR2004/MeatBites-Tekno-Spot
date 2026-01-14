@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "685446149488",
+    "project_id": "meatbites-19ef9",
+    "storage_bucket": "meatbites-19ef9.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:685446149488:android:7755e4e749119f0b270bb5",
+        "android_client_info": {
+          "package_name": "com.example.meatbites_flutter"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "685446149488-31mkobbqq8v25hgcjcc8m8kn76csdaa6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD5c3L6eCkT3CjrPuF7vVrUmDewOEVB92Q"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "685446149488-31mkobbqq8v25hgcjcc8m8kn76csdaa6.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "685446149488-hbk3l9d7r08np95lujfjvnhqlrgmv6ks.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.meatbitesFlutter"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

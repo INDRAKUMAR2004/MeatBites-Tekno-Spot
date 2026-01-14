@@ -171,7 +171,7 @@ class _FlashSaleWidgetState extends State<FlashSaleWidget> {
                           Text('₹399',
                               style: TextStyle(
                                   decoration: TextDecoration.lineThrough,
-                                  color: Colors.grey[400],
+                                  color: Colors.grey[500],
                                   fontSize: 12)),
                           const Spacer(),
                           Container(

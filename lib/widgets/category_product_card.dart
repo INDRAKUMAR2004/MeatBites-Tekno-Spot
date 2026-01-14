@@ -40,7 +40,7 @@ class CategoryProductCard extends ConsumerWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             _ImageSection(item: item),
-             Expanded(
+            Expanded(
               child: Padding(
                 padding: const EdgeInsets.all(10), // Reduced padding
                 child: Column(
@@ -60,7 +60,8 @@ class CategoryProductCard extends ConsumerWidget {
                     const SizedBox(height: 6),
                     // Net Weight Pill
                     Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 6, vertical: 3),
                       decoration: BoxDecoration(
                         color: Colors.grey[50],
                         borderRadius: BorderRadius.circular(4),
@@ -76,7 +77,7 @@ class CategoryProductCard extends ConsumerWidget {
                       ),
                     ),
                     const Spacer(),
-                    
+
                     // Footer: Price + Button
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -98,7 +99,7 @@ class CategoryProductCard extends ConsumerWidget {
                                 '₹${item.oldPrice!.toStringAsFixed(0)}',
                                 style: TextStyle(
                                   fontSize: 10,
-                                  color: Colors.grey[400],
+                                  color: Colors.grey[600],
                                   decoration: TextDecoration.lineThrough,
                                 ),
                               ),
@@ -128,7 +129,7 @@ class _ImageSection extends StatelessWidget {
   Widget build(BuildContext context) {
     // 1.55 Aspect Ratio to make image shorter and save vertical space
     return AspectRatio(
-      aspectRatio: 1.55, 
+      aspectRatio: 1.55,
       child: Stack(
         children: [
           ClipRRect(
@@ -139,12 +140,13 @@ class _ImageSection extends StatelessWidget {
               fit: BoxFit.cover,
               errorBuilder: (_, __, ___) => Container(
                 color: Colors.grey[100],
-                child: const Icon(Icons.image_not_supported, color: Colors.grey),
+                child:
+                    const Icon(Icons.image_not_supported, color: Colors.grey),
               ),
             ),
           ),
           if (item.discountPercentage != null)
-             Positioned(
+            Positioned(
               top: 8,
               left: 0,
               child: Container(
@@ -165,7 +167,7 @@ class _ImageSection extends StatelessWidget {
                 ),
               ),
             ),
-           Positioned(
+          Positioned(
             bottom: 6,
             right: 6,
             child: Container(
@@ -177,14 +179,13 @@ class _ImageSection extends StatelessWidget {
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  const Icon(LucideIcons.clock, size: 10, color: AppColors.primary),
+                  const Icon(LucideIcons.clock,
+                      size: 10, color: AppColors.primary),
                   const SizedBox(width: 3),
                   Text(
                     item.deliveryTime,
                     style: const TextStyle(
-                      fontSize: 9, 
-                      fontWeight: FontWeight.w700
-                    ),
+                        fontSize: 9, fontWeight: FontWeight.w700),
                   ),
                 ],
               ),
@@ -243,7 +244,7 @@ class _DynamicAddButton extends ConsumerWidget {
             InkWell(
               onTap: () => ref.read(cartProvider.notifier).increaseQty(item.id),
               child: const Padding(
-               padding: EdgeInsets.symmetric(horizontal: 6, vertical: 4),
+                padding: EdgeInsets.symmetric(horizontal: 6, vertical: 4),
                 child: Icon(Icons.add, color: Colors.white, size: 14),
               ),
             ),
@@ -254,8 +255,8 @@ class _DynamicAddButton extends ConsumerWidget {
       return InkWell(
         onTap: () {
           ref.read(cartProvider.notifier).addToCart(item);
-           ScaffoldMessenger.of(context).hideCurrentSnackBar();
-           ScaffoldMessenger.of(context).showSnackBar(
+          ScaffoldMessenger.of(context).hideCurrentSnackBar();
+          ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(
               content: Text('Added to cart'),
               duration: Duration(milliseconds: 800),

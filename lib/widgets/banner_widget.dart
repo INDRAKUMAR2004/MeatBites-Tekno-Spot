@@ -32,7 +32,7 @@ class _BannerWidgetState extends State<BannerWidget> {
     // Banner 1: Offer
     BannerModel(
       title: "FLAT 50% OFF",
-      subtitle: "On your first order | Code: WELCOME50",
+      subtitle: "On your first order | \n Code: WELCOME50",
       imagePath: 'assets/products/curry-cut-chicken.png',
       // Gradient: Brand Red to Deep Maroon (Classic Brand Look)
       gradientColors: [const Color(0xFFB32624), const Color(0xFF5A1212)],
@@ -267,12 +267,12 @@ class _BannerWidgetState extends State<BannerWidget> {
                 // 4. Hero Image (Right Side - Popping Out)
                 Positioned(
                   right:
-                      -15, // Negative margin to cut off slightly or look impactful
+                      -25, // Negative margin to cut off slightly or look impactful
                   bottom: -15,
                   child: Hero(
                     tag: 'banner_${banner.title}',
                     child: Transform.rotate(
-                      angle: 0, // Slight tilt for dynamism
+                      angle: 0.05, // Slight tilt for dynamism
                       child: Image.asset(
                         banner.imagePath,
                         height: 170, // Larger

@@ -36,4 +36,27 @@ class CartItem {
       netWeight: netWeight ?? this.netWeight,
     );
   }
+  Map<String, dynamic> toMap() {
+    return {
+      'id': id,
+      'name': name,
+      'price': price,
+      'qty': qty,
+      'image': image,
+      'weight': weight,
+      'netWeight': netWeight,
+    };
+  }
+
+  factory CartItem.fromMap(Map<String, dynamic> map) {
+    return CartItem(
+      id: map['id'] ?? '',
+      name: map['name'] ?? '',
+      price: (map['price'] ?? 0).toDouble(),
+      qty: map['qty']?.toInt() ?? 0,
+      image: map['image'] ?? '',
+      weight: map['weight'] ?? '',
+      netWeight: map['netWeight'],
+    );
+  }
 }
