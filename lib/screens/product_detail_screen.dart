@@ -9,6 +9,10 @@ import '../models/product.dart';
 import '../providers/cart_provider.dart';
 import '../widgets/category_product_card.dart';
 
+import '../providers/product_provider.dart';
+
+// ... imports
+
 class ProductDetailScreen extends ConsumerWidget {
   final Product product;
 
@@ -17,10 +21,15 @@ class ProductDetailScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     // Find similar products (same category, excluding current)
-    final similarProducts = PRODUCTS
-        .where((p) => p.category == product.category && p.id != product.id)
-        .take(5)
-        .toList();
+    final allProductsAsync = ref.watch(productsProvider);
+    final similarProducts = allProductsAsync.when(
+      data: (products) => products
+          .where((p) => p.category == product.category && p.id != product.id)
+          .take(5)
+          .toList(),
+      loading: () => <Product>[],
+      error: (_, __) => <Product>[],
+    );
     final cartNotifier = ref.read(cartProvider.notifier);
     final cartItems = ref.watch(cartProvider);
 

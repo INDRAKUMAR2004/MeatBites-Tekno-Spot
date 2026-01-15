@@ -3,6 +3,7 @@ import 'cart_item.dart';
 
 class OrderModel {
   final String id;
+  final String userId;
   final List<CartItem> items;
   final double totalAmount;
   final DateTime date;
@@ -10,6 +11,7 @@ class OrderModel {
 
   OrderModel({
     required this.id,
+    required this.userId,
     required this.items,
     required this.totalAmount,
     required this.date,
@@ -18,6 +20,7 @@ class OrderModel {
 
   Map<String, dynamic> toMap() {
     return {
+      'userId': userId,
       'items': items.map((x) => x.toMap()).toList(),
       'totalAmount': totalAmount,
       'date': Timestamp.fromDate(date),
@@ -29,6 +32,7 @@ class OrderModel {
     final map = doc.data() as Map<String, dynamic>;
     return OrderModel(
       id: doc.id,
+      userId: map['userId'] ?? '',
       items: List<CartItem>.from(
         (map['items'] as List<dynamic>).map((x) => CartItem.fromMap(x)),
       ),

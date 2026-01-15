@@ -1,23 +1,25 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../constants/colors.dart';
 import '../constants/data.dart';
 import '../models/category.dart';
 import '../models/product.dart';
+import '../providers/product_provider.dart';
 import '../widgets/category_product_card.dart';
 import '../widgets/category_carousel.dart';
 
-class CategoriesScreen extends StatefulWidget {
+class CategoriesScreen extends ConsumerStatefulWidget {
   final String? initialCategory;
 
   const CategoriesScreen({super.key, this.initialCategory});
 
   @override
-  State<CategoriesScreen> createState() => _CategoriesScreenState();
+  ConsumerState<CategoriesScreen> createState() => _CategoriesScreenState();
 }
 
-class _CategoriesScreenState extends State<CategoriesScreen> {
+class _CategoriesScreenState extends ConsumerState<CategoriesScreen> {
   late String _selectedCategory;
 
   @override
@@ -50,98 +52,105 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
       orElse: () => CATEGORIES.first,
     );
 
-    final filteredProducts =
-        PRODUCTS.where((p) => p.category == _selectedCategory).toList();
+    final productsAsync = ref.watch(productsProvider);
 
     return Scaffold(
       backgroundColor: const Color(0xFFF7F8FB),
-      body: CustomScrollView(
-        slivers: [
-          _HeroSliverHeader(
-            category: currentCategory,
-            count: filteredProducts.length,
-            onBack: () => Navigator.maybePop(context),
-          ),
-
-          // Category carousel selector
-          SliverToBoxAdapter(
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(16, 14, 16, 8),
-              child: CategoryCarousel(
-                categories: CATEGORIES,
-                selectedId: _selectedCategory,
-                onSelect: (id) => setState(() => _selectedCategory = id),
+      body: productsAsync.when(
+        loading: () => const Center(child: CircularProgressIndicator()),
+        error: (err, stack) => Center(child: Text('Error loading products: $err')),
+        data: (allProducts) {
+          final filteredProducts = allProducts.where((p) => p.category == _selectedCategory).toList();
+          
+          return CustomScrollView(
+            slivers: [
+              _HeroSliverHeader(
+                category: currentCategory,
+                count: filteredProducts.length,
+                onBack: () => Navigator.maybePop(context),
               ),
-            ),
-          ),
-
-          // Products title row (sticky-looking feel)
-          SliverToBoxAdapter(
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(16, 12, 16, 8),
-              child: Row(
-                children: [
-                  Text(
-                    "Explore",
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w900,
-                      color: Colors.grey[900],
-                      letterSpacing: -0.2,
-                    ),
+    
+              // Category carousel selector
+              SliverToBoxAdapter(
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(16, 14, 16, 8),
+                  child: CategoryCarousel(
+                    categories: CATEGORIES,
+                    selectedId: _selectedCategory,
+                    onSelect: (id) => setState(() => _selectedCategory = id),
                   ),
-                  const SizedBox(width: 8),
-                  Container(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-                    decoration: BoxDecoration(
-                      color: AppColors.primary.withOpacity(0.10),
-                      borderRadius: BorderRadius.circular(999),
-                      border: Border.all(
-                        color: AppColors.primary.withOpacity(0.18),
-                      ),
-                    ),
-                    child: Text(
-                      currentCategory.label,
-                      style: const TextStyle(
-                        fontWeight: FontWeight.w900,
-                        color: AppColors.primary,
-                        fontSize: 12,
-                      ),
-                    ),
-                  ),
-                  const Spacer(),
-                  _MiniBadge(text: "${filteredProducts.length} items"),
-                ],
-              ),
-            ),
-          ),
-
-          // Animated product grid per category
-          SliverPadding(
-            padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
-            sliver: SliverToBoxAdapter(
-              child: AnimatedSwitcher(
-                duration: const Duration(milliseconds: 380),
-                switchInCurve: Curves.easeOutCubic,
-                switchOutCurve: Curves.easeInCubic,
-                transitionBuilder: (child, anim) {
-                  return FadeTransition(
-                    opacity: anim,
-                    child: ScaleTransition(
-                      scale: Tween<double>(begin: 0.985, end: 1.0).animate(anim),
-                      child: child,
-                    ),
-                  );
-                },
-                child: KeyedSubtree(
-                  key: ValueKey(_selectedCategory),
-                  child: _ProductGrid(products: filteredProducts),
                 ),
               ),
-            ),
-          ),
-        ],
+    
+              // Products title row (sticky-looking feel)
+              SliverToBoxAdapter(
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(16, 12, 16, 8),
+                  child: Row(
+                    children: [
+                      Text(
+                        "Explore",
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w900,
+                          color: Colors.grey[900],
+                          letterSpacing: -0.2,
+                        ),
+                      ),
+                      const SizedBox(width: 8),
+                      Container(
+                        padding:
+                            const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                        decoration: BoxDecoration(
+                          color: AppColors.primary.withOpacity(0.10),
+                          borderRadius: BorderRadius.circular(999),
+                          border: Border.all(
+                            color: AppColors.primary.withOpacity(0.18),
+                          ),
+                        ),
+                        child: Text(
+                          currentCategory.label,
+                          style: const TextStyle(
+                            fontWeight: FontWeight.w900,
+                            color: AppColors.primary,
+                            fontSize: 12,
+                          ),
+                        ),
+                      ),
+                      const Spacer(),
+                      _MiniBadge(text: "${filteredProducts.length} items"),
+                    ],
+                  ),
+                ),
+              ),
+    
+              // Animated product grid per category
+              SliverPadding(
+                padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
+                sliver: SliverToBoxAdapter(
+                  child: AnimatedSwitcher(
+                    duration: const Duration(milliseconds: 380),
+                    switchInCurve: Curves.easeOutCubic,
+                    switchOutCurve: Curves.easeInCubic,
+                    transitionBuilder: (child, anim) {
+                      return FadeTransition(
+                        opacity: anim,
+                        child: ScaleTransition(
+                          scale: Tween<double>(begin: 0.985, end: 1.0).animate(anim),
+                          child: child,
+                        ),
+                      );
+                    },
+                    child: KeyedSubtree(
+                      key: ValueKey(_selectedCategory),
+                      child: _ProductGrid(products: filteredProducts),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          );
+        },
       ),
     );
   }

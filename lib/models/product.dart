@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class Product {
   final String id;
   final String category;
@@ -28,4 +30,39 @@ class Product {
     this.discountPercentage,
     this.isBestseller = false,
   });
+  factory Product.fromSnapshot(DocumentSnapshot doc) {
+    final data = doc.data() as Map<String, dynamic>;
+    return Product(
+      id: doc.id,
+      category: data['category'] ?? '',
+      name: data['name'] ?? '',
+      weight: data['weight'] ?? '',
+      price: (data['price'] ?? 0).toDouble(),
+      oldPrice: data['oldPrice'] != null ? (data['oldPrice'] as num).toDouble() : null,
+      elite: data['elite'] ?? false,
+      image: data['image'] ?? '',
+      netWeight: data['netWeight'] ?? '',
+      grossWeight: data['grossWeight'] ?? '',
+      deliveryTime: data['deliveryTime'] ?? '',
+      discountPercentage: data['discountPercentage'],
+      isBestseller: data['isBestseller'] ?? false,
+    );
+  }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'category': category,
+      'name': name,
+      'weight': weight,
+      'price': price,
+      'oldPrice': oldPrice,
+      'elite': elite,
+      'image': image,
+      'netWeight': netWeight,
+      'grossWeight': grossWeight,
+      'deliveryTime': deliveryTime,
+      'discountPercentage': discountPercentage,
+      'isBestseller': isBestseller,
+    };
+  }
 }

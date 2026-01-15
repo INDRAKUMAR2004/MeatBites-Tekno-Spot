@@ -259,7 +259,7 @@ class CartScreen extends ConsumerWidget {
                           ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(content: Text('Order placed successfully!')),
                           );
-                          context.go('/orders');
+                          // context.go('/orders');
                         }
                       } catch (e) {
                          if (context.mounted) {

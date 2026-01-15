@@ -65,7 +65,10 @@ class HomeScreen extends ConsumerWidget {
                                style: TextStyle(color: Colors.grey, fontSize: 12, overflow: TextOverflow.ellipsis),
                              );
                            }
-                           return Text('${address.addressLine}, ${address.city}', 
+                           final displayLabel = address.city.isNotEmpty 
+                               ? '${address.addressLine}, ${address.city}' 
+                               : address.addressLine;
+                           return Text(displayLabel, 
                              style: const TextStyle(color: Colors.grey, fontSize: 12, overflow: TextOverflow.ellipsis),
                            );
                          },

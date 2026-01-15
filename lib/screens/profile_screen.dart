@@ -16,7 +16,7 @@ class ProfileScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final authStateAsync = ref.watch(authStateProvider);
     final userProfileAsync = ref.watch(userProfileProvider);
-    
+
     final currentUser = authStateAsync.asData?.value;
     final userModel = userProfileAsync.asData?.value;
 
@@ -30,7 +30,7 @@ class ProfileScreen extends ConsumerWidget {
             const Text('Profile',
                 style: TextStyle(fontSize: 22, fontWeight: FontWeight.w700)),
             const SizedBox(height: 16),
-            
+
             // Auth State Banner
             if (currentUser != null)
               Container(
@@ -65,44 +65,53 @@ class ProfileScreen extends ConsumerWidget {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                               Flexible(
-                                 child: Text(
-                                  userModel?.displayName ?? currentUser.displayName ?? 'MeatBites User',
+                              Flexible(
+                                child: Text(
+                                  userModel?.displayName ??
+                                      currentUser.displayName ??
+                                      'MeatBites User',
                                   style: const TextStyle(
-                                      fontSize: 18, fontWeight: FontWeight.w700),
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.w700),
                                   overflow: TextOverflow.ellipsis,
-                                 ),
-                               ),
-                               IconButton(
-                                 onPressed: () {
-                                   if (userModel != null) {
-                                     context.push('/edit-profile', extra: userModel);
-                                   } else {
-                                      // Fallback if model isn't loaded but auth is (rare)
-                                       // Create a temporary model from auth data
-                                       // But best to wait for model.
-                                   }
-                                 },
-                                 icon: const Icon(LucideIcons.edit3, size: 20, color: AppColors.primary),
-                                 padding: EdgeInsets.zero,
-                                 constraints: const BoxConstraints(),
-                               )
+                                ),
+                              ),
+                              IconButton(
+                                onPressed: () {
+                                  if (userModel != null) {
+                                    context.push('/edit-profile',
+                                        extra: userModel);
+                                  } else {
+                                    // Fallback if model isn't loaded but auth is (rare)
+                                    // Create a temporary model from auth data
+                                    // But best to wait for model.
+                                  }
+                                },
+                                icon: const Icon(LucideIcons.edit3,
+                                    size: 20, color: AppColors.primary),
+                                padding: EdgeInsets.zero,
+                                constraints: const BoxConstraints(),
+                              )
                             ],
                           ),
                           const SizedBox(height: 4),
                           if (userModel?.phoneNumber.isNotEmpty == true)
                             Text(userModel!.phoneNumber,
-                                style: TextStyle(color: Colors.grey[800], fontSize: 13, fontWeight: FontWeight.w500)),
+                                style: TextStyle(
+                                    color: Colors.grey[800],
+                                    fontSize: 13,
+                                    fontWeight: FontWeight.w500)),
                           Text(currentUser.email ?? '',
-                              style: TextStyle(color: Colors.grey[600], fontSize: 13)),
+                              style: TextStyle(
+                                  color: Colors.grey[600], fontSize: 13)),
                           if (userModel?.address.isNotEmpty == true)
                             Padding(
                               padding: const EdgeInsets.only(top: 4),
-                              child: Text(userModel!.address, 
-                                maxLines: 2,
-                                overflow: TextOverflow.ellipsis,
-                                style: TextStyle(color: Colors.grey[500], fontSize: 12)
-                              ),
+                              child: Text(userModel!.address,
+                                  maxLines: 2,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: TextStyle(
+                                      color: Colors.grey[500], fontSize: 12)),
                             )
                         ],
                       ),
@@ -111,39 +120,45 @@ class ProfileScreen extends ConsumerWidget {
                 ),
               )
             else
-               Container(
-                 padding: const EdgeInsets.all(20),
-                 decoration: BoxDecoration(
-                   color: AppColors.primary.withOpacity(0.05),
-                   borderRadius: BorderRadius.circular(16),
-                   border: Border.all(color: AppColors.primary.withOpacity(0.1))
-                 ),
-                 child: Column(
-                   children: [
-                     const Text("You are not logged in", style: TextStyle(fontWeight: FontWeight.bold)),
-                     const SizedBox(height: 12),
-                     Row(
-                       children: [
-                         Expanded(
-                           child: ElevatedButton(
-                             onPressed: () => context.push('/login'),
-                             style: ElevatedButton.styleFrom(backgroundColor: AppColors.primary, foregroundColor: Colors.white),
-                             child: const Text("Login"),
-                           ),
-                         ),
-                         const SizedBox(width: 12),
-                         Expanded(
-                           child: OutlinedButton(
-                             onPressed: () => context.push('/signup'),
-                             style: OutlinedButton.styleFrom(foregroundColor: AppColors.primary, side: const BorderSide(color: AppColors.primary)),
-                             child: const Text("Sign Up"),
-                           ),
-                         ),
-                       ],
-                     )
-                   ],
-                 ),
-               ),
+              Container(
+                padding: const EdgeInsets.all(20),
+                decoration: BoxDecoration(
+                    color: AppColors.primary.withOpacity(0.05),
+                    borderRadius: BorderRadius.circular(16),
+                    border:
+                        Border.all(color: AppColors.primary.withOpacity(0.1))),
+                child: Column(
+                  children: [
+                    const Text("You are not logged in",
+                        style: TextStyle(fontWeight: FontWeight.bold)),
+                    const SizedBox(height: 12),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: ElevatedButton(
+                            onPressed: () => context.push('/login'),
+                            style: ElevatedButton.styleFrom(
+                                backgroundColor: AppColors.primary,
+                                foregroundColor: Colors.white),
+                            child: const Text("Login"),
+                          ),
+                        ),
+                        const SizedBox(width: 12),
+                        Expanded(
+                          child: OutlinedButton(
+                            onPressed: () => context.push('/signup'),
+                            style: OutlinedButton.styleFrom(
+                                foregroundColor: AppColors.primary,
+                                side:
+                                    const BorderSide(color: AppColors.primary)),
+                            child: const Text("Sign Up"),
+                          ),
+                        ),
+                      ],
+                    )
+                  ],
+                ),
+              ),
 
             // ... (rest of the menu)
             const SizedBox(height: 20),
