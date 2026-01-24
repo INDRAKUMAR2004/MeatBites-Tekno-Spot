@@ -1,0 +1,82 @@
+{
+  "project_info": {
+    "project_number": "880015295608",
+    "project_id": "meatbites-6a65c",
+    "storage_bucket": "meatbites-6a65c.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:880015295608:android:f05d095e3a900e1067598d",
+        "android_client_info": {
+          "package_name": "com.meatbites"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "880015295608-51re4miagqi3vfi8uit883npqku2f23d.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCZaZ4RZuGFGmfy1phK8WPR13jxfAB2SRQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "880015295608-51re4miagqi3vfi8uit883npqku2f23d.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "880015295608-7ebcd8uug4cqp0d5m57h7huvmbte15kc.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.meatbites"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:880015295608:android:2cb8227c91add3ba67598d",
+        "android_client_info": {
+          "package_name": "com.meatbites.app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "880015295608-51re4miagqi3vfi8uit883npqku2f23d.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCZaZ4RZuGFGmfy1phK8WPR13jxfAB2SRQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "880015295608-51re4miagqi3vfi8uit883npqku2f23d.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "880015295608-7ebcd8uug4cqp0d5m57h7huvmbte15kc.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.meatbites"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
